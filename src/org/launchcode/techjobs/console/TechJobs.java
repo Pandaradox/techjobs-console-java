@@ -48,6 +48,7 @@ public class TechJobs {
 
                     // Print list of skills, employers, etc
                     for (String item : results) {
+                    	
                         System.out.println(item);
                     }
                 }
