@@ -1,6 +1,7 @@
 package org.launchcode.techjobs.console;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -25,9 +26,9 @@ public class TechJobs {
         HashMap<String, String> actionChoices = new HashMap<>();
         actionChoices.put("search", "Search");
         actionChoices.put("list", "List");
+        actionChoices.put("exit", "Exit");
 
         System.out.println("Welcome to LaunchCode's TechJobs App!");
-
         // Allow the user to search until they manually quit
         while (true) {
 
@@ -51,7 +52,7 @@ public class TechJobs {
                     }
                 }
 
-            } else { // choice is "search"
+            } else if (actionChoice.equals("search")){ 
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
@@ -65,6 +66,9 @@ public class TechJobs {
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
+            } else { //Choice is exit
+            	System.out.println("\nGoodbye!");
+            	break;
             }
         }
     }
@@ -111,9 +115,34 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
     	String display = "";
-    	if (someJobs.size() == 0) {
-    		System.out.println("No Jobs Were Found");
-    	}
+    	//Alphabetically Sort Jobs By Job Name:
+    	int y = 0; //Char Compare Position
+		for (int x = 0; x < someJobs.size()-1; x++) {
+			y = 0;
+			//Checks for equal Char (case-insensitive):
+			while (Character.toLowerCase(someJobs.get(x).get("name").toCharArray()[y]) 
+					== Character.toLowerCase(someJobs.get(x+1).get("name").toCharArray()[y])) {
+				
+				//Checks for name boundary
+				if (y == someJobs.get(x).get("name").length()-1 
+						|| y == someJobs.get(x+1).get("name").length()-1) {
+					break;
+				}
+				y++;
+			}
+			
+			//Performs swap based on Compare Char position and resets the whole array scan
+			if (Character.toLowerCase(someJobs.get(x).get("name").toCharArray()[y]) 
+					> Character.toLowerCase(someJobs.get(x+1).get("name").toCharArray()[y])) {
+				Collections.swap(someJobs, x, x+1);
+				x = -1;
+			}
+		}
+   	
+		if (someJobs.size() == 0) {
+			System.out.println("No Jobs Were Found");
+		}
+    	
     	for (HashMap<String,String> job : someJobs) {
 //	    	String display = String.format("*****\n" + 
 //	    			"position type: %1s\n" + 
@@ -126,7 +155,7 @@ public class TechJobs {
 //	    			job.get("employer"),
 //	    			job.get("location"),
 //	    			job.get("core competency"));
-    		System.out.println("*****");
+    		System.out.println("\n*****");
     		for (String key : job.keySet()) {
     			display = key + ": "+ job.get(key);
     			System.out.println(display);
