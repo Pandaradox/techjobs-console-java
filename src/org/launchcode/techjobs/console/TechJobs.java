@@ -132,8 +132,12 @@ public class TechJobs {
 			}
 			
 			//Performs swap based on Compare Char position and resets the whole array scan
-			if (Character.toLowerCase(someJobs.get(x).get("name").toCharArray()[y]) 
-					> Character.toLowerCase(someJobs.get(x+1).get("name").toCharArray()[y])) {
+			//Included condition where the second term ran out of chars to compare, leading to a needed swap.
+			if ((Character.toLowerCase(someJobs.get(x).get("name").toCharArray()[y]) 
+					> Character.toLowerCase(someJobs.get(x+1).get("name").toCharArray()[y])) 
+					|| ((Character.toLowerCase(someJobs.get(x).get("name").toCharArray()[y]) 
+									== Character.toLowerCase(someJobs.get(x+1).get("name").toCharArray()[y]))
+										&& someJobs.get(x+1).get("name").length() < someJobs.get(x).get("name").length())){
 				Collections.swap(someJobs, x, x+1);
 				x = -1;
 			}
